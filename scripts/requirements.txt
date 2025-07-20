@@ -1,3 +1,4 @@
 requests
 markdown
 pyyaml
+python-dotenv

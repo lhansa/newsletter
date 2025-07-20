@@ -3,6 +3,10 @@ import requests
 from pathlib import Path
 import markdown
 from utils import parse_markdown_with_frontmatter, update_frontmatter_field
+from dotenv import load_dotenv
+
+load_dotenv(dotenv_path=".env.local")  # o el path que prefieras
+
 
 CORREOS_DIR = Path("correos")
 API_KEY = os.environ["MAILERLITE_API_KEY"]
