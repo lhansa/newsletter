@@ -22,7 +22,8 @@ def crear_newsletter(titulo, contenido_html, send_at=None):
         "type": "regular",
         "subject": titulo,
         "name": titulo,
-        "html": contenido_html
+        "html": contenido_html, 
+        "groups": ["160454873555404503"] # ["93330267065812572"]
     }
 
     if send_at:
