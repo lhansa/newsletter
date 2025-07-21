@@ -1,16 +1,19 @@
 import os
 import requests
+import random
 from pathlib import Path
 import markdown
 from utils import parse_markdown_with_frontmatter, update_frontmatter_field
-from dotenv import load_dotenv
 
-load_dotenv(dotenv_path=".env.local")  # o el path que prefieras
+# from dotenv import load_dotenv
+# load_dotenv(dotenv_path=".env.local")  # o el path que prefieras
 
 
-CORREOS_DIR = Path("correos")
+CORREOS_DIR = Path("../correos")
 API_KEY = os.environ["MAILERLITE_API_KEY"]
-API_URL = "https://connect.mailerlite.com/api/newsletters"
+API_URL_CREATE = "https://connect.mailerlite.com/api/campaigns"
+API_URL_SCHEDULE = "https://connect.mailerlite.com/api/campaigns/{id}/schedule"
+
 
 HEADERS = {
     "Authorization": f"Bearer {API_KEY}",
@@ -20,18 +23,24 @@ HEADERS = {
 def crear_newsletter(titulo, contenido_html, send_at=None):
     data = {
         "type": "regular",
-        "subject": titulo,
         "name": titulo,
-        "html": contenido_html, 
+        "status": "draft", 
+        "emails": [
+            {
+                "from": "hola@leonardohansa.com", 
+                "from_name": "Leonardo Hansa",
+                "reply_to": "hola@leonardohansa.com",
+                "subject": titulo,
+                "content": "hola"
+            }
+        ],
+        # "scheduled_for": send_at.strftime('%Y-%m-%d %H:%M:%S'),
+        "scheduled_for": "2025-07-21 18:40:00",
         "groups": ["160454873555404503"] # ["93330267065812572"]
     }
 
-    if send_at:
-        data["schedule"] = {
-            "send_at": send_at  # Debe estar en formato ISO 8601
-        }
-
-    response = requests.post(API_URL, headers=HEADERS, json=data)
+    response = requests.post(API_URL_CREATE, headers=HEADERS, json=data)
+    response.json()
     response.raise_for_status()
     return response.json()
 
@@ -42,6 +51,7 @@ def main():
         return
 
     for archivo in archivos:
+        # archivo = archivos[0]
         try:
             front, cuerpo_md = parse_markdown_with_frontmatter(archivo)
         except Exception as e:

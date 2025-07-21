@@ -1,8 +1,8 @@
 ---
 title: Cómo automatizar el envío de tus correos
-status: draft
+status: sending
 date: 2025-07-21
-send_at: 2025-07-22T10:00:00+02:00
+send_at: 2025-07-21T18:20:00+02:00
 lang: es
 ---
 
